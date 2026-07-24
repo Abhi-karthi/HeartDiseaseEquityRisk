@@ -4,121 +4,343 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Equity in the Risk Score</title>
-    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { background-color: #f8f9fa; }
-        .hero { background-color: #2c3e50; color: white; padding: 3rem 0; }
-        .result-card { transition: all 0.3s ease; }
-        .hidden { display: none; }
-        .gap-highlight { color: #e74c3c; font-weight: bold; }
+        :root {
+            --primary-red: #d32f2f;
+            --dark-red: #9a0007;
+            --light-bg: #fdfdfd;
+        }
+        body { background-color: var(--light-bg); font-family: system-ui, -apple-system, sans-serif; display: flex; flex-direction: column; min-height: 100vh;}
+        .content-wrapper { flex: 1; }
+
+        .bg-clinical-red { background-color: var(--primary-red) !important; color: white; }
+        .text-clinical-red { color: var(--primary-red) !important; }
+        .btn-clinical-red { background-color: var(--primary-red); color: white; border: none; }
+        .btn-clinical-red:hover { background-color: var(--dark-red); color: white; }
+        .card-header-red { border-top: 4px solid var(--primary-red); }
+
+        .hero { background-color: white; border-bottom: 2px solid #eee; padding: 3rem 0; }
+
+        /* UI Cleanups: Form Sections */
+        .form-section {
+            background-color: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            border: 1px solid #e9ecef;
+        }
+        .section-title {
+            font-size: 1.1rem;
+            color: var(--primary-red);
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+            border-bottom: 2px solid #fee2e2;
+            padding-bottom: 0.5rem;
+        }
+        .form-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: #6c757d;
+            margin-bottom: 0.3rem;
+        }
+
+        /* Custom Red Checkboxes */
+        .form-check-input:checked {
+            background-color: var(--primary-red) !important;
+            border-color: var(--primary-red) !important;
+        }
+        .form-check-input:focus {
+            border-color: var(--primary-red) !important;
+            box-shadow: 0 0 0 0.25rem rgba(211, 47, 47, 0.25) !important;
+        }
+
+        /* Chatbot Styling */
+        #chatbot-widget {
+            position: fixed; bottom: 20px; right: 20px; width: 350px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-radius: 10px;
+            background: white; display: flex; flex-direction: column; z-index: 1050;
+            border: 1px solid #dee2e6;
+        }
+        #chat-header { background: var(--primary-red); color: white; padding: 10px 15px; border-radius: 10px 10px 0 0; cursor: pointer; display: flex; justify-content: space-between; }
+        #chat-body { height: 300px; overflow-y: auto; padding: 15px; display: none; background: #fafafa; }
+        #chat-footer { padding: 10px; border-top: 1px solid #dee2e6; display: none; background: white; border-radius: 0 0 10px 10px;}
+        .msg { margin-bottom: 10px; padding: 8px 12px; border-radius: 15px; max-width: 85%; font-size: 0.9rem; }
+        .msg-user { background: #e9ecef; margin-left: auto; color: #333; }
+        .msg-bot { background: var(--primary-red); color: white; margin-right: auto; }
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-    <!-- Hero Section / Campaign Pitch -->
-    <div class="hero text-center mb-5">
-        <div class="container">
-            <h1 class="display-5 fw-bold">The Invisible Risk</h1>
-            <p class="lead">Standard cardiovascular models calculate biology. They ignore environment.</p>
-            <p>See how missing Social Determinants of Health (SDOH) data artificially deflates risk scores, leaving vulnerable patients under-treated.</p>
+    <div class="content-wrapper">
+        <div class="hero text-center mb-4">
+            <div class="container">
+                <h1 class="display-4 fw-bold text-clinical-red">The Invisible Risk</h1>
+                <p class="lead text-secondary">A comprehensive model demonstrating how ignoring social and environmental data leaves vulnerable patients under-treated.</p>
+            </div>
         </div>
-    </div>
 
-    <div class="container">
-        <div class="row g-4">
-            <!-- Left Column: The Calculator -->
-            <div class="col-lg-6">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0">Patient Profile</h5>
+        <div class="container pb-5">
+            <div class="row g-4">
+
+                <!-- Left Column: The Comprehensive Form -->
+                <div class="col-lg-7">
+                    <div class="card shadow-sm card-header-red border-0">
+                        <div class="card-body p-4">
+                            <form id="riskForm">
+
+                                <!-- 1. Demographics & Vitals -->
+                                <div class="form-section">
+                                    <div class="section-title">1. Traditional Demographics & Vitals</div>
+                                    <div class="row g-3">
+                                        <div class="col-md-4">
+                                            <label class="form-label">Age</label>
+                                            <input type="number" class="form-control" id="age" value="55" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Gender (At Birth)</label>
+                                            <select class="form-select" id="gender">
+                                                <option value="male">Male</option>
+                                                <option value="female">Female</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Race / Ethnicity</label>
+                                            <select class="form-select" id="ethnicity">
+                                                <option value="white">White / Caucasian</option>
+                                                <option value="black">Black / African American</option>
+                                                <option value="hispanic">Hispanic / Latino</option>
+                                                <option value="asian">Asian / Pacific Islander</option>
+                                                <option value="indigenous">Indigenous / Native American</option>
+                                                <option value="mixed">Mixed Race / Multiracial</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Systolic BP</label>
+                                            <input type="number" class="form-control" id="sysbp" value="135" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Total Chol</label>
+                                            <input type="number" class="form-control" id="chol" value="210" required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Diabetes?</label>
+                                            <select class="form-select" id="diabetes">
+                                                <option value="no">No</option>
+                                                <option value="yes">Yes</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 2. Extended History -->
+                                <div class="form-section">
+                                    <div class="section-title">2. Clinical & Substance History</div>
+
+                                    <div class="mb-4">
+                                        <label class="form-label d-block mb-2">Previous Conditions</label>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input prev-disease-chk" type="checkbox" value="hypertension" id="chk_hyp">
+                                            <label class="form-check-label" for="chk_hyp">Hypertension</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input prev-disease-chk" type="checkbox" value="ckd" id="chk_ckd">
+                                            <label class="form-check-label" for="chk_ckd">Chronic Kidney Disease</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input prev-disease-chk" type="checkbox" value="pvd" id="chk_pvd">
+                                            <label class="form-check-label" for="chk_pvd">Peripheral Vascular Disease</label>
+                                        </div>
+                                        <div class="form-check form-check-inline mt-2">
+                                            <input class="form-check-input prev-disease-chk" type="checkbox" value="stroke" id="chk_stroke">
+                                            <label class="form-check-label" for="chk_stroke">Prior Stroke / TIA</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Smoking Status</label>
+                                            <select class="form-select" id="smoker">
+                                                <option value="never">Never Smoked</option>
+                                                <option value="former">Former Smoker</option>
+                                                <option value="current">Current Smoker</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Other Substances</label>
+                                            <select class="form-select" id="drugs">
+                                                <option value="none">None</option>
+                                                <option value="stimulants">Cocaine/Stimulants</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Family History (Early ASCVD)</label>
+                                            <select class="form-select" id="family_history">
+                                                <option value="no">No</option>
+                                                <option value="yes">Yes (Parent/Sibling < 55/65)</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Cancer History</label>
+                                            <select class="form-select" id="cancer_history">
+                                                <option value="none">None / Non-Cardiotoxic</option>
+                                                <option value="cardiotoxic">History of Cardiotoxic Chemo/Radiation</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 3. Social Determinants -->
+                                <div class="form-section mb-4">
+                                    <div class="section-title">3. Social Determinants of Health (SDOH)</div>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Household Income</label>
+                                            <select class="form-select" id="income">
+                                                <option value=">100k">> $100,000 / year</option>
+                                                <option value="75k-100k">$75,000 - $100,000 / year</option>
+                                                <option value="50k-75k">$50,000 - $75,000 / year</option>
+                                                <option value="25k-50k">$25,000 - $50,000 / year</option>
+                                                <option value="<25k">< $25,000 / year</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Healthcare Access</label>
+                                            <select class="form-select" id="healthcare">
+                                                <option value="fully_insured">Fully Insured / Great Access</option>
+                                                <option value="underinsured">Underinsured / High Deductible</option>
+                                                <option value="uninsured">Uninsured / Poor Access</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Food Access</label>
+                                            <select class="form-select" id="food_access">
+                                                <option value="fresh">High (Proximity to fresh food)</option>
+                                                <option value="desert">Low (Food desert / Insecure)</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label class="form-label">General Diet Quality</label>
+                                            <select class="form-select" id="diet">
+                                                <option value="mediterranean">Mediterranean (High olive oil, fish, nuts, legumes)</option>
+                                                <option value="dash">DASH Diet (Low sodium, high fruits/veg, lean proteins)</option>
+                                                <option value="plant_based">Whole-Food Plant-Based / Vegetarian</option>
+                                                <option value="standard" selected>Standard American (Moderate processed foods & red meat)</option>
+                                                <option value="ultra_processed">High Ultra-Processed (High sodium, added sugars, fast food)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-clinical-red w-100 btn-lg shadow-sm fw-bold">Calculate True Risk Profile</button>
+                            </form>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <form id="riskForm">
-                            <h6 class="text-muted border-bottom pb-2 mb-3">1. Standard Clinical Data (ASCVD)</h6>
-                            <div class="row g-3 mb-4">
-                                <div class="col-md-4">
-                                    <label class="form-label">Age</label>
-                                    <input type="number" class="form-control" id="age" value="55" required>
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="form-label">Systolic BP</label>
-                                    <input type="number" class="form-control" id="sysbp" value="135" required>
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="form-label">Total Chol</label>
-                                    <input type="number" class="form-control" id="chol" value="210" required>
-                                </div>
-                                <div class="col-md-12">
-                                    <label class="form-label">Smoker?</label>
-                                    <select class="form-select" id="smoker">
-                                        <option value="no">No</option>
-                                        <option value="yes">Yes</option>
-                                    </select>
+                </div>
+
+                <!-- Right Column: Results & Recommendations -->
+                <div class="col-lg-5">
+
+                    <!-- 1. The Results Area -->
+                    <div id="resultsArea" class="hidden sticky-top" style="top: 20px;">
+                        <div class="card shadow-sm mb-3 border-0">
+                            <div class="card-body text-center py-4 bg-white rounded border">
+                                <h5 class="text-secondary mb-3">Standard 10-Year ASCVD Risk</h5>
+                                <h2 class="fw-bold text-dark"><span id="resBase">0</span>%</h2>
+                                <hr class="my-4 text-muted">
+                                <h5 class="text-clinical-red mb-3">Context-Adjusted Risk</h5>
+                                <h1 class="display-3 fw-bold text-clinical-red"><span id="resAdjusted">0</span>%</h1>
+                            </div>
+                        </div>
+
+                        <div class="alert bg-clinical-red shadow-sm text-center text-white border-0 py-3">
+                            <h5 class="mb-0 fw-bold">The Equity Gap: +<span id="resGap">0</span>%</h5>
+                        </div>
+
+                        <div class="card shadow-sm border-0 mb-3" style="background-color: #f8f9fa;">
+                            <div class="card-body">
+                                <h6 class="text-dark border-bottom pb-2 fw-bold text-uppercase" style="font-size: 0.85rem;">Medical Recommendations</h6>
+                                <p class="mb-1"><strong>Risk Tier:</strong> <span id="recTier" class="text-clinical-red">...</span></p>
+                                <p class="small mb-3 text-muted" id="recAction">...</p>
+                                <div class="alert alert-secondary border-0 small mb-0 p-3">
+                                    <strong class="d-block mb-1 text-dark">Clinical Next Steps:</strong>
+                                    <span id="recClinical" class="text-dark">...</span>
                                 </div>
                             </div>
+                        </div>
 
-                            <h6 class="text-muted border-bottom pb-2 mb-3">2. Missing Context (SDOH Data)</h6>
-                            <div class="row g-3 mb-4">
-                                <div class="col-md-12">
-                                    <label class="form-label">Household Income Level</label>
-                                    <select class="form-select" id="income">
-                                        <option value="high">High / Stable (>400% FPL)</option>
-                                        <option value="low">Low / Unstable (<138% FPL)</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-12">
-                                    <label class="form-label">Neighborhood Food Access</label>
-                                    <select class="form-select" id="food_access">
-                                        <option value="high">High (Proximity to fresh groceries)</option>
-                                        <option value="low">Low (Food desert)</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-12">
-                                    <label class="form-label">Healthcare Access / Insurance</label>
-                                    <select class="form-select" id="healthcare_access">
-                                        <option value="good">Consistent / Fully Insured</option>
-                                        <option value="poor">Intermittent / Underinsured</option>
-                                    </select>
-                                </div>
+                        <!-- AI Dynamic Protocol UI -->
+                        <div class="card shadow-sm border-0" style="background-color: #fde8e8;">
+                            <div class="card-body">
+                                <h6 class="text-clinical-red border-bottom border-danger pb-2 fw-bold text-uppercase" style="font-size: 0.85rem;">
+                                    Context Summary
+                                </h6>
+                                <p class="small text-dark mb-0" id="aiProtocolText" style="line-height: 1.6;">
+                                    Generating dynamic protocol...
+                                </p>
                             </div>
+                        </div>
+                    </div>
 
-                            <button type="submit" class="btn btn-primary w-100 btn-lg">Calculate True Risk</button>
-                        </form>
+                    <!-- 2. The Loading Screen -->
+                    <div id="loadingArea" class="hidden h-100 d-flex flex-column align-items-center justify-content-center text-secondary text-center p-5 border rounded bg-white shadow-sm">
+                        <div class="spinner-border text-clinical-red mb-3" style="width: 3rem; height: 3rem;" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <h5 class="text-dark">Analyzing clinical data...</h5>
+                        <p class="small text-muted mt-2">Generating context summary with AI...</p>
+                    </div>
+
+                    <!-- 3. The Initial Placeholder -->
+                    <div id="placeholderArea" class="h-100 d-flex align-items-center justify-content-center text-secondary text-center p-5 border rounded bg-white shadow-sm">
+                        <h5 class="text-muted fw-normal" style="line-height: 1.5;">Enter patient data to reveal the algorithmic blind spot and view clinical recommendations.</h5>
                     </div>
                 </div>
             </div>
+        </div>
+    </div> <!-- End content-wrapper -->
 
-            <!-- Right Column: The Reveal -->
-            <div class="col-lg-6">
-                <div id="resultsArea" class="hidden">
-                    <div class="card shadow-sm mb-4 border-primary">
-                        <div class="card-body text-center py-5">
-                            <h4 class="text-muted">Standard ASCVD 10-Year Risk</h4>
-                            <h1 class="display-3 fw-bold text-primary"><span id="resBase">0</span>%</h1>
-                            <p class="text-muted">Based strictly on clinical vitals.</p>
-                        </div>
-                    </div>
-
-                    <div class="card shadow-sm mb-4 border-danger">
-                        <div class="card-body text-center py-5">
-                            <h4 class="text-muted">Context-Adjusted Risk</h4>
-                            <h1 class="display-3 fw-bold text-danger"><span id="resAdjusted">0</span>%</h1>
-                            <p class="text-muted">Accounting for structural vulnerabilities.</p>
-                        </div>
-                    </div>
-
-                    <!-- The Campaign Pitch -->
-                    <div class="alert alert-warning text-center shadow-sm">
-                        <h5>The Equity Gap: <span class="gap-highlight">+<span id="resGap">0</span>%</span></h5>
-                        <p class="mb-0">Without collecting SDOH data, your clinic's algorithm assumes this patient has the resources of a wealthy suburb. <strong>We are undertreating our most vulnerable patients.</strong> Start collecting SDOH data today.</p>
-                    </div>
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-5 mt-auto">
+        <div class="container text-center text-md-start">
+            <div class="row">
+                <div class="col-md-6 mb-4 mb-md-0">
+                    <h6 class="text-uppercase fw-bold text-warning mb-3" style="font-size: 0.85rem;">⚠️ Medical Disclaimer</h6>
+                    <p class="small text-light opacity-75" style="line-height: 1.6;">
+                        This tool is designed strictly for educational, demonstrative, and advocacy purposes to highlight algorithmic equity gaps in healthcare. It does not provide medical advice, diagnosis, or treatment. Always consult a qualified healthcare provider or cardiologist regarding medical decisions.
+                    </p>
                 </div>
-
-                <!-- Placeholder before calculation -->
-                <div id="placeholderArea" class="h-100 d-flex align-items-center justify-content-center text-muted text-center p-5 border rounded" style="background: white;">
-                    <h5>Enter patient data to reveal the algorithmic blind spot.</h5>
+                <div class="col-md-6">
+                    <h6 class="text-uppercase fw-bold mb-3" style="font-size: 0.85rem;">Datasets & Methodology</h6>
+                    <p class="small text-light opacity-75" style="line-height: 1.6;">
+                        This application utilizes a simulated deterministic algorithm. Risk weights are modeled to reflect established clinical frameworks, including the <strong>ACC/AHA Pooled Cohort Equations (PCE)</strong> and the <strong>AHA PREVENT™ equations</strong> (which incorporate social deprivation indices). Population assumptions are drawn from historical parameters seen in the <strong>NHANES</strong> and <strong>ARIC</strong> datasets.
+                    </p>
                 </div>
+                <!-- GitHub Repo Link -->
+                <div class="col-md-12 text-center mt-4 border-top border-secondary pt-4">
+                    <p class="small text-light opacity-75 mb-0">
+                        Open Source Repository: <a href="https://github.com/Abhi-karthi/HeartDiseaseEquityRisk.git" class="text-warning text-decoration-none" target="_blank">View on GitHub</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Gemini AI Chatbot -->
+    <div id="chatbot-widget">
+        <div id="chat-header" onclick="toggleChat()">
+            <strong style="font-size: 0.95rem;">AI Clinical Navigator</strong>
+            <span id="chat-toggle-icon">▲</span>
+        </div>
+        <div id="chat-body">
+            <div class="msg msg-bot">Hello. I am the Gemini Clinical Assistant. Do you have questions about cardiovascular risk factors, SDOH, or next steps like a CAC scan?</div>
+        </div>
+        <div id="chat-footer">
+            <div class="input-group">
+                <input type="text" id="chatInput" class="form-control" placeholder="Ask a question..." onkeypress="if(event.key === 'Enter') sendChatMessage()">
+                <button class="btn btn-clinical-red" onclick="sendChatMessage()">Send</button>
             </div>
         </div>
     </div>
@@ -127,34 +349,113 @@
         document.getElementById('riskForm').addEventListener('submit', async function(e) {
             e.preventDefault();
 
-            // Gather data
+            // 1. Frontend Age Validation
+            const ageValue = parseFloat(document.getElementById('age').value);
+            if (ageValue < 18) {
+                alert("Only 18 and above.");
+                return;
+            }
+
+            // Gather checkboxes
+            const prevDiseases = Array.from(document.querySelectorAll('.prev-disease-chk:checked')).map(chk => chk.value);
+
             const data = {
-                age: document.getElementById('age').value,
+                age: ageValue,
+                gender: document.getElementById('gender').value,
+                ethnicity: document.getElementById('ethnicity').value,
                 sysbp: document.getElementById('sysbp').value,
                 chol: document.getElementById('chol').value,
+                diabetes: document.getElementById('diabetes').value,
                 smoker: document.getElementById('smoker').value,
+                drugs: document.getElementById('drugs').value,
+                family_history: document.getElementById('family_history').value,
+                cancer_history: document.getElementById('cancer_history').value,
+                prev_diseases: prevDiseases,
                 income: document.getElementById('income').value,
+                healthcare: document.getElementById('healthcare').value,
                 food_access: document.getElementById('food_access').value,
-                healthcare_access: document.getElementById('healthcare_access').value
+                diet: document.getElementById('diet').value
             };
 
-            // Fetch from Flask backend
-            const response = await fetch('/calculate', {
+            // Hide placeholder and results, Show Loading Screen
+            document.getElementById('placeholderArea').classList.add('hidden');
+            document.getElementById('resultsArea').classList.add('hidden');
+            document.getElementById('loadingArea').classList.remove('hidden');
+
+            try {
+                const response = await fetch('/calculate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    alert(errorData.error || "An error occurred during calculation.");
+                    document.getElementById('loadingArea').classList.add('hidden');
+                    document.getElementById('placeholderArea').classList.remove('hidden');
+                    return;
+                }
+
+                const result = await response.json();
+
+                // Populate hard UI elements
+                document.getElementById('resBase').innerText = result.base_risk;
+                document.getElementById('resAdjusted').innerText = result.adjusted_risk;
+                document.getElementById('resGap').innerText = result.risk_gap;
+
+                document.getElementById('recTier').innerText = result.recommendations.tier;
+                document.getElementById('recAction').innerText = result.recommendations.action;
+                document.getElementById('recClinical').innerText = result.recommendations.clinical;
+                document.getElementById('aiProtocolText').innerText = result.ai_protocol;
+
+                // Hide loading screen, Show Final Results
+                document.getElementById('loadingArea').classList.add('hidden');
+                document.getElementById('resultsArea').classList.remove('hidden');
+
+            } catch (error) {
+                alert("Failed to reach the server. Please try again.");
+                document.getElementById('loadingArea').classList.add('hidden');
+                document.getElementById('placeholderArea').classList.remove('hidden');
+                console.error("Calculation error:", error);
+            }
+        });
+
+        // Chatbot Logic
+        let chatOpen = false;
+        function toggleChat() {
+            chatOpen = !chatOpen;
+            document.getElementById('chat-body').style.display = chatOpen ? 'block' : 'none';
+            document.getElementById('chat-footer').style.display = chatOpen ? 'flex' : 'none';
+            document.getElementById('chat-toggle-icon').innerText = chatOpen ? '▼' : '▲';
+        }
+
+        async function sendChatMessage() {
+            const inputField = document.getElementById('chatInput');
+            const message = inputField.value.trim();
+            if (!message) return;
+
+            appendMessage('user', message);
+            inputField.value = '';
+
+            const response = await fetch('/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
+                body: JSON.stringify({ message: message })
             });
+
             const result = await response.json();
+            appendMessage('bot', result.response);
+        }
 
-            // Update UI
-            document.getElementById('resBase').innerText = result.base_risk;
-            document.getElementById('resAdjusted').innerText = result.adjusted_risk;
-            document.getElementById('resGap').innerText = result.risk_gap;
-
-            // Toggle visibility
-            document.getElementById('placeholderArea').classList.add('hidden');
-            document.getElementById('resultsArea').classList.remove('hidden');
-        });
+        function appendMessage(sender, text) {
+            const body = document.getElementById('chat-body');
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `msg msg-${sender}`;
+            msgDiv.innerText = text;
+            body.appendChild(msgDiv);
+            body.scrollTop = body.scrollHeight;
+        }
     </script>
 </body>
 </html>
