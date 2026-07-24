@@ -1,0 +1,81 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="false" level="WARNING" enabled_by_default="false">
+      <option name="ignoredPackages">
+        <list>
+          <option value="blinker" />
+          <option value="click" />
+          <option value="dnspython" />
+          <option value="Flask" />
+          <option value="itsdangerous" />
+          <option value="Jinja2" />
+          <option value="Mako" />
+          <option value="MarkupSafe" />
+          <option value="pymongo" />
+          <option value="pystache" />
+          <option value="python-dotenv" />
+          <option value="PyYAML" />
+          <option value="render-template" />
+          <option value="Werkzeug" />
+          <option value="gunicorn" />
+          <option value="certifi" />
+          <option value="python-kasa" />
+          <option value="amqp" />
+          <option value="annotated-types" />
+          <option value="anyio" />
+          <option value="billiard" />
+          <option value="celery" />
+          <option value="charset-normalizer" />
+          <option value="click-didyoumean" />
+          <option value="click-plugins" />
+          <option value="click-repl" />
+          <option value="h11" />
+          <option value="httpcore" />
+          <option value="httpx" />
+          <option value="idna" />
+          <option value="kombu" />
+          <option value="numpy" />
+          <option value="ollama" />
+          <option value="opencv-python" />
+          <option value="packaging" />
+          <option value="prompt_toolkit" />
+          <option value="pydantic" />
+          <option value="pydantic_core" />
+          <option value="python-dateutil" />
+          <option value="redis" />
+          <option value="requests" />
+          <option value="six" />
+          <option value="typing-inspection" />
+          <option value="typing_extensions" />
+          <option value="tzdata" />
+          <option value="tzlocal" />
+          <option value="urllib3" />
+          <option value="vine" />
+          <option value="wcwidth" />
+        </list>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyPep8Inspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <option name="ignoredErrors">
+        <list>
+          <option value="E501" />
+        </list>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyShadowingBuiltinsInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <option name="ignoredNames">
+        <list>
+          <option value="input" />
+        </list>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredIdentifiers">
+        <list>
+          <option value="pygame" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>
