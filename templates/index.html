@@ -11,7 +11,7 @@
             --dark-red: #9a0007;
             --light-bg: #fdfdfd;
         }
-        body { background-color: var(--light-bg); font-family: system-ui, -apple-system, sans-serif; display: flex; flex-direction: column; min-height: 100vh;}
+        body { background-color: var(--light-bg);font-family: system-ui, -apple-system, sans-serif; display: flex; flex-direction: column; min-height: 100vh;}
         .content-wrapper { flex: 1; }
 
         .bg-clinical-red { background-color: var(--primary-red) !important; color: white; }
@@ -77,8 +77,8 @@
     <div class="content-wrapper">
         <div class="hero text-center mb-4">
             <div class="container">
-                <h1 class="display-4 fw-bold text-clinical-red">The Invisible Risk</h1>
-                <p class="lead text-secondary">A comprehensive model demonstrating how ignoring social and environmental data leaves vulnerable patients under-treated.</p>
+                <h1 class="display-4 fw-bold text-clinical-red">ASCVD + SDOH Risk Calculator</h1>
+                <p class="lead text-secondary">A model that calculates risk for cardiovascular disease that also uses social and environmental data.</p>
             </div>
         </div>
 
@@ -97,18 +97,20 @@
                                     <div class="row g-3">
                                         <div class="col-md-4">
                                             <label class="form-label">Age</label>
-                                            <input type="number" class="form-control" id="age" value="55" required>
+                                            <input type="number" class="form-control" id="age" required>
                                         </div>
                                         <div class="col-md-4">
                                             <label class="form-label">Gender (At Birth)</label>
-                                            <select class="form-select" id="gender">
+                                            <select class="form-select" id="gender" required>
+                                                <option value="" selected disabled></option>
                                                 <option value="male">Male</option>
                                                 <option value="female">Female</option>
                                             </select>
                                         </div>
                                         <div class="col-md-4">
                                             <label class="form-label">Race / Ethnicity</label>
-                                            <select class="form-select" id="ethnicity">
+                                            <select class="form-select" id="ethnicity" required>
+                                                <option value="" selected disabled></option>
                                                 <option value="white">White / Caucasian</option>
                                                 <option value="black">Black / African American</option>
                                                 <option value="hispanic">Hispanic / Latino</option>
@@ -119,15 +121,16 @@
                                         </div>
                                         <div class="col-md-4">
                                             <label class="form-label">Systolic BP</label>
-                                            <input type="number" class="form-control" id="sysbp" value="135" required>
+                                            <input type="number" class="form-control" id="sysbp" required>
                                         </div>
                                         <div class="col-md-4">
                                             <label class="form-label">Total Chol</label>
-                                            <input type="number" class="form-control" id="chol" value="210" required>
+                                            <input type="number" class="form-control" id="chol" required>
                                         </div>
                                         <div class="col-md-4">
                                             <label class="form-label">Diabetes?</label>
-                                            <select class="form-select" id="diabetes">
+                                            <select class="form-select" id="diabetes" required>
+                                                <option value="" selected disabled></option>
                                                 <option value="no">No</option>
                                                 <option value="yes">Yes</option>
                                             </select>
@@ -162,7 +165,8 @@
                                     <div class="row g-3">
                                         <div class="col-md-6">
                                             <label class="form-label">Smoking Status</label>
-                                            <select class="form-select" id="smoker">
+                                            <select class="form-select" id="smoker" required>
+                                                <option value="" selected disabled></option>
                                                 <option value="never">Never Smoked</option>
                                                 <option value="former">Former Smoker</option>
                                                 <option value="current">Current Smoker</option>
@@ -170,21 +174,24 @@
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label">Other Substances</label>
-                                            <select class="form-select" id="drugs">
+                                            <select class="form-select" id="drugs" required>
+                                                <option value="" selected disabled></option>
                                                 <option value="none">None</option>
                                                 <option value="stimulants">Cocaine/Stimulants</option>
                                             </select>
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label">Family History (Early ASCVD)</label>
-                                            <select class="form-select" id="family_history">
+                                            <select class="form-select" id="family_history" required>
+                                                <option value="" selected disabled></option>
                                                 <option value="no">No</option>
                                                 <option value="yes">Yes (Parent/Sibling < 55/65)</option>
                                             </select>
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label">Cancer History</label>
-                                            <select class="form-select" id="cancer_history">
+                                            <select class="form-select" id="cancer_history" required>
+                                                <option value="" selected disabled></option>
                                                 <option value="none">None / Non-Cardiotoxic</option>
                                                 <option value="cardiotoxic">History of Cardiotoxic Chemo/Radiation</option>
                                             </select>
@@ -198,7 +205,8 @@
                                     <div class="row g-3">
                                         <div class="col-md-6">
                                             <label class="form-label">Household Income</label>
-                                            <select class="form-select" id="income">
+                                            <select class="form-select" id="income" required>
+                                                <option value="" selected disabled></option>
                                                 <option value=">100k">> $100,000 / year</option>
                                                 <option value="75k-100k">$75,000 - $100,000 / year</option>
                                                 <option value="50k-75k">$50,000 - $75,000 / year</option>
@@ -208,7 +216,8 @@
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label">Healthcare Access</label>
-                                            <select class="form-select" id="healthcare">
+                                            <select class="form-select" id="healthcare" required>
+                                                <option value="" selected disabled></option>
                                                 <option value="fully_insured">Fully Insured / Great Access</option>
                                                 <option value="underinsured">Underinsured / High Deductible</option>
                                                 <option value="uninsured">Uninsured / Poor Access</option>
@@ -216,18 +225,20 @@
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label">Food Access</label>
-                                            <select class="form-select" id="food_access">
+                                            <select class="form-select" id="food_access" required>
+                                                <option value="" selected disabled></option>
                                                 <option value="fresh">High (Proximity to fresh food)</option>
                                                 <option value="desert">Low (Food desert / Insecure)</option>
                                             </select>
                                         </div>
                                         <div class="col-md-12">
                                             <label class="form-label">General Diet Quality</label>
-                                            <select class="form-select" id="diet">
+                                            <select class="form-select" id="diet" required>
+                                                <option value="" selected disabled></option>
                                                 <option value="mediterranean">Mediterranean (High olive oil, fish, nuts, legumes)</option>
                                                 <option value="dash">DASH Diet (Low sodium, high fruits/veg, lean proteins)</option>
                                                 <option value="plant_based">Whole-Food Plant-Based / Vegetarian</option>
-                                                <option value="standard" selected>Standard American (Moderate processed foods & red meat)</option>
+                                                <option value="standard">Standard American (Moderate processed foods & red meat)</option>
                                                 <option value="ultra_processed">High Ultra-Processed (High sodium, added sugars, fast food)</option>
                                             </select>
                                         </div>
@@ -257,6 +268,27 @@
 
                         <div class="alert bg-clinical-red shadow-sm text-center text-white border-0 py-3">
                             <h5 class="mb-0 fw-bold">The Equity Gap: +<span id="resGap">0</span>%</h5>
+                        </div>
+
+                        <!-- CDC NHANES ML Model Verification Card -->
+                        <div class="card shadow-sm border-0 mb-3 bg-white border">
+                            <div class="card-body py-3">
+                                <h6 class="text-dark border-bottom pb-2 fw-bold text-uppercase mb-2" style="font-size: 0.80rem;">
+                                    CDC NHANES XGBoost Verification
+                                </h6>
+                                <div class="d-flex justify-content-between small text-secondary mb-1">
+                                    <span>ML Biological Baseline:</span>
+                                    <strong class="text-dark"><span id="resMlBase">0</span>%</strong>
+                                </div>
+                                <div class="d-flex justify-content-between small text-secondary mb-1">
+                                    <span>ML SDOH-Adjusted Risk:</span>
+                                    <strong class="text-clinical-red"><span id="resMlAdjusted">0</span>%</strong>
+                                </div>
+                                <div class="d-flex justify-content-between small text-secondary">
+                                    <span>ML Verified Equity Gap:</span>
+                                    <strong class="text-clinical-red">+<span id="resMlGap">0</span>%</strong>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="card shadow-sm border-0 mb-3" style="background-color: #f8f9fa;">
@@ -403,6 +435,10 @@
                 document.getElementById('resBase').innerText = result.base_risk;
                 document.getElementById('resAdjusted').innerText = result.adjusted_risk;
                 document.getElementById('resGap').innerText = result.risk_gap;
+
+                document.getElementById('resMlBase').innerText = result.ml_base_risk !== null ? result.ml_base_risk : 'N/A';
+                document.getElementById('resMlAdjusted').innerText = result.ml_adjusted_risk !== null ? result.ml_adjusted_risk : 'N/A';
+                document.getElementById('resMlGap').innerText = result.ml_risk_gap !== null ? result.ml_risk_gap : '0';
 
                 document.getElementById('recTier').innerText = result.recommendations.tier;
                 document.getElementById('recAction').innerText = result.recommendations.action;
